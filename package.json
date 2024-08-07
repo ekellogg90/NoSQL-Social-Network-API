@@ -1,0 +1,14 @@
+{
+  "name": "nosql-social-network-api",
+  "version": "1.0.0",
+  "description": "NoSQL Social Media Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2"
+  }
+}

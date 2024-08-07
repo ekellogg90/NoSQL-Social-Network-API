@@ -1,4 +1,5 @@
-const Thought = require('../models/Thought');
+const { Thought, User } = require('../models');
+const { ObjectId } = require('mongoose').Types;
 
 module.exports = {
     async getThoughts(req, res) {
@@ -47,16 +48,21 @@ module.exports = {
     },
     async deleteThought(req, res) {
         try {
-            const thought = await Thought.findOneAndDelete(
-            { thoughts: req.params.thoughtId },
-            { $pull: { thoughts: req.params.thoughtId } },
-            { new: true }
-            );
+            const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
             if (!thought) {
-                return res.status(404).json({ message: 'No thought found at this ID' });
+                return res.status(404).json({ message: 'No thought at this ID' });
             }
+            // const user = await User.findOneAndDelete(
+            // { thoughts: req.params.thoughtId },
+            // { $pull: { thoughts: req.params.thoughtId } },
+            // { new: true }
+            // );
+            // if (!user) {
+            //     return res.status(404).json({ message: 'No user found at this ID' });
+            // }
             res.json({ message: 'Thought successfully deleted' });
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -79,9 +85,11 @@ module.exports = {
     },
     async removeReaction(req, res) {
         try {
+            console.log('This is the delete route reaction route');
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $pull: { reactions: { reactionId: req.params.reactionId } } },
+                // reactionId: new ObjectId( req.params.reactionId )
                 { runValidators: true, new: true }
             );
             if (!thought) {
